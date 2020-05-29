@@ -1,32 +1,21 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+      <b-card title="Card Title" no-body>
+        <b-card-header header-tag="nav">
+          <b-nav card-header pills>
+            <b-nav-item to="/" exact exact-active-class="active" >ZHome</b-nav-item>
+            <b-nav-item to="/config" exact exact-active-class="active">Pengaturan</b-nav-item>
+            <b-nav-item to="/route/list" exact exact-active-class="active">Rute</b-nav-item>
+          </b-nav>
+        </b-card-header>
+        <b-card-body class="text-center">
+         <router-view/>
+        </b-card-body>
+      </b-card> 
+    </div>  
   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-#nav {
-  padding: 30px;
-}
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>

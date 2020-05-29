@@ -1,0 +1,86 @@
+<template>
+    <div class="mr-4 ml-4 mt-3">
+      <div class="text-left">Tambah Pemberentian bus</div>
+      <b-form @submit="onSubmit" inline >
+        <div>
+          <b-form-input list="input-list" id="input-with-list inline-form-input-name"
+            class="mb-2 mr-sm-2 mb-sm-0"
+            v-model="busstop"></b-form-input>
+          <!-- <b-form-datalist id="input-list" :options="options"></b-form-datalist> -->
+        </div>
+        <b-button type="submit" class="mb-2 mr-sm-2 mb-sm-0" variant="primary">Submit</b-button>
+      </b-form>
+      <div>
+        <Table :items="items" :fields="fields" @deleteData="deleteData"></Table>
+      </div>
+    </div>
+</template>
+
+<script>
+import Table from '@/components/Table.vue'
+
+const db = require('@/../models/index.js')
+
+
+export default {
+  name: 'AddBusStop',
+  components: {
+    Table
+  },
+  props: {
+    id: Number
+  },
+  data() {
+    return {
+      fields: [
+        { key: 'row_number', label: 'No.', colType:"index" },
+        { key: 'id', label: 'Id', colType:"text" },
+        { key: 'busStopName', label: 'Bus Stop', colType:"text" },
+        { key: 'del_button', label: 'Delete', colType:"delete" }
+      ],
+      items: [],
+      test1:[],
+      test2:[],
+      busstop: '',
+      renderComponent: false
+    }
+  },
+  created() {
+    db.Route.findByPk(this.$route.params.id, {
+      include: [
+        {
+            model: db.BusStop,
+            as: 'BusStop'
+        }
+    ]
+    }).then(data => data.getBusStop({attributes:{exclude:['RouteBusStop']}})).then(data => JSON.stringify(data))
+      .then(data => this.items = JSON.parse(data))
+      console.log(this.items)
+    },
+  methods : {
+    onSubmit(evt){
+      evt.preventDefault() 
+      db.BusStop.findOrCreate({
+        where: {busStopName: this.busstop}
+      }).then(data =>{
+          this.items.push(JSON.parse(JSON.stringify(data))[0])
+          db.Route.findOne({ where:{ id : this.$route.params.id}})
+            .then(result => result.addBusStop(data))
+        })
+    },
+    deleteData(data){
+      db.Route.findByPk(this.$route.params.id)
+      .then(result =>{ 
+        this.items = this.items.filter((arr) => arr.id != data.id)
+        result.removeBusStop(data.id)
+      })
+
+      this.renderComponent = false
+        this.$nextTick(() => {
+          this.renderComponent = true
+        })
+    }
+  }
+
+}
+</script>
