@@ -1,1 +1,16 @@
-[{"criteria":"Load Factor","weight":0.40511363636363634},{"criteria":"Headway","weight":0.21837121212121213},{"criteria":"Frekuensi","weight":0.16837121212121214},{"criteria":"RTT","weight":0.20814393939393938}]
+[
+  {
+    "criteria":"Load Factor",
+    "weight":0.40511363636363634
+  },
+  {
+    "criteria":"Headway",
+    "weight":0.21837121212121213},
+  {
+    "criteria":"Frekuensi",
+    "weight":0.16837121212121214
+  },
+  {
+    "criteria":"RTT",
+    "weight":0.20814393939393938}
+]

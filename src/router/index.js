@@ -2,16 +2,16 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // Import all needed component
-import Home from '@/views/Home.vue'
+import Home from '@/views/PageHome.vue'
 // Config View
-import Config from '@/views/config/Config.vue'
-import Config_Edit from '@/views/config/ConfigEdit.vue'
+import Config from '@/views/PageConfig.vue'
+import ConfigEdit from '@/views/PageConfigEdit.vue'
 // Bus View
-import Route from '@/views/bus/Route.vue'
-import RouteList from '@/views/bus/RouteList.vue'
+import Route from '@/views/PageRoute.vue'
+import RouteList from '@/components/RouteList.vue'
 //import BusStopList from '@/views/bus/BusStopList.vue'
 import RouteEdit from '@/views/bus/RouteEdit.vue'
-import AddBusStop from '@/views/bus/AddBusStop.vue'
+import RouteBusStopAdd from '@/components/RouteBusStopAdd.vue'
 // Report View
 
 
@@ -34,16 +34,16 @@ Vue.use(VueRouter)
   },
   {
     path: '/config/edit',
-    name: 'Config_Edit',
-    component: Config_Edit
+    name: 'ConfigEdit',
+    component: ConfigEdit
   },
   {
-    path: '/route/',
+    path: '/route',
     name: 'Route',
     component: Route,
     children: [
       {
-        path: 'list',
+        path: 'routelist',
         name: 'RouteList',
         component: RouteList
       },
@@ -59,8 +59,8 @@ Vue.use(VueRouter)
       // },
       {
         path: 'busstop',
-        name: 'AddBusStop',
-        component: AddBusStop
+        name: 'RouteBusStop',
+        component: RouteBusStopAdd
       }
     ]
   }
