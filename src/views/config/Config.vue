@@ -10,7 +10,7 @@
 
       <b-row class="mb-3">
         <b-col md="3" class="ml-md-auto ml-sm-auto p-3">
-          <b-button to="./config/edit">I am a Link</b-button>
+          <b-button to="./config/edit">Edit</b-button>
         </b-col>
       </b-row>
     </b-container>
