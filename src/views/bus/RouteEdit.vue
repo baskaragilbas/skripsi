@@ -6,7 +6,7 @@
           <b-form-input list="input-list" id="input-with-list inline-form-input-name"
             class="mb-2 mr-sm-2 mb-sm-0"
             v-model="busstop"></b-form-input>
-          <!-- <b-form-datalist id="input-list" :options="options"></b-form-datalist> -->
+          <b-form-datalist id="input-list" :options="list"></b-form-datalist>
         </div>
         <b-button type="submit" class="mb-2 mr-sm-2 mb-sm-0" variant="primary">Submit</b-button>
       </b-form>
@@ -20,6 +20,8 @@
 import Table from '@/components/Table.vue'
 
 const db = require('@/../models/index.js')
+const { Op } = require("sequelize");
+
 
 
 export default {
@@ -39,8 +41,7 @@ export default {
         { key: 'del_button', label: 'Delete', colType:"delete" }
       ],
       items: [],
-      test1:[],
-      test2:[],
+      list:[],
       busstop: '',
       renderComponent: false
     }
@@ -55,7 +56,7 @@ export default {
     ]
     }).then(data => data.getBusStop({attributes:{exclude:['RouteBusStop']}})).then(data => JSON.stringify(data))
       .then(data => this.items = JSON.parse(data))
-      console.log(this.items)
+    db.BusStop.findAll().then(data => JSON.parse(JSON.stringify(data)).map( x => this.list.push(x.busStopName)))
     },
   methods : {
     onSubmit(evt){
