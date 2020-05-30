@@ -4,30 +4,28 @@
     <b-container fluid class="text-light text-center">
       <b-row class="mb-3">
         <b-col>
-          <Table :items="weight" :fields="fields"></Table>
+          <AppTable :items="weight" :fields="fields"></AppTable>
         </b-col>
       </b-row>
 
       <b-row class="mb-3">
         <b-col md="3" class="ml-md-auto ml-sm-auto p-3">
-          <b-button to="./config/edit">Edit</b-button>
+          <router-link class="btn btn-secondary" v-bind:to="{name: 'ConfigEdit'}">Edit</router-link>
         </b-col>
       </b-row>
-    </b-container>
-    
-    
+    </b-container>  
   </div>
 </template>
 
 <script>
 
-import Table from '@/components/Table.vue';
+import AppTable from '@/components/AppTable.vue';
 import json from '@/db/weight.json'
 
 export default {
   name: 'Config', 
   components: {
-    Table
+    AppTable
   },
   data(){
     return{
