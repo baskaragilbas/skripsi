@@ -12,6 +12,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         reference: {model: 'Routes', key:'id'}
       },
+      reportID: {
+        type: Sequelize.INTEGER,
+        reference: {model: 'Report', key:'id'}
+      },
       time: {
         type: Sequelize.INTEGER
       },

@@ -2,6 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Headway = sequelize.define('Headway', {
     routeBusTopID: DataTypes.INTEGER,
+    reportID: DataTypes.INTEGER,
     value: DataTypes.STRING
   }, {});
   Headway.associate = function(models) {

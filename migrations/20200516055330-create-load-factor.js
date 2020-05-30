@@ -12,6 +12,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         reference: {model: 'BusStops', key:'id'}
       },
+      reportID: {
+        type: Sequelize.INTEGER,
+        reference: {model: 'Report', key:'id'}
+      },
       value: {
         type: Sequelize.INTEGER
       },

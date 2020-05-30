@@ -2,6 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Frequency = sequelize.define('Frequency', {
     routeId: DataTypes.INTEGER,
+    reportID: DataTypes.INTEGER,
     time: DataTypes.INTEGER,
     value: DataTypes.INTEGER
   }, {});
