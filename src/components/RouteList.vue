@@ -11,13 +11,13 @@
         <b-button type="submit" class="mb-2 mr-sm-2 mb-sm-0" variant="primary">Submit</b-button>
       </b-form>
       <div>
-        <Table :items="items" :fields="fields" @deleteData="deleteData"></Table>
+        <AppTable :items="items" :fields="fields" @deleteData="deleteData"></AppTable>
       </div>
     </div>
 </template>
 
 <script>
-import Table from '@/components/Table.vue'
+import AppTable from '@/components/AppTable.vue'
 
 const db = require('@/../models/index.js')
 
@@ -25,7 +25,7 @@ const db = require('@/../models/index.js')
 export default {
   name: 'RouteList',
   components: {
-    Table
+    AppTable
   },
   data() {
     return {
