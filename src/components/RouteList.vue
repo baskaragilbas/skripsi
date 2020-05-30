@@ -1,6 +1,6 @@
 <template>
     <div class="mr-4 ml-4 mt-3">
-      <div class="text-left">Tambah Pemberentian bus</div>
+      <div class="text-left">Tambah Rute</div>
       <b-form @submit="onSubmit" inline >
         <div>
           <b-form-input list="input-list" id="input-with-list inline-form-input-name"
@@ -10,6 +10,7 @@
         </div>
         <b-button type="submit" class="mb-2 mr-sm-2 mb-sm-0" variant="primary">Submit</b-button>
       </b-form>
+      <br>
       <div>
         <AppTable :items="items" :fields="fields" @deleteData="deleteData"></AppTable>
       </div>

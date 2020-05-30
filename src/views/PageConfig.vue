@@ -1,6 +1,7 @@
 <template>
   <div class="config">
     <h3>Konfigurasi bobot</h3>
+    <br>
     <b-container fluid class="text-light text-center">
       <b-row class="mb-3">
         <b-col>

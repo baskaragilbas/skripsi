@@ -4,7 +4,7 @@
       <TheNav/>
       <b-card title="Card Title" no-body>
         <b-card-body class="text-center">
-         <router-view v-bind:key="$route.path"/>
+         <router-view/>
         </b-card-body>
       </b-card> 
     </div>  

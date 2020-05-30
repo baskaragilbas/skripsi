@@ -13,7 +13,9 @@ import RouteList from '@/components/RouteList.vue'
 import RouteEdit from '@/views/bus/RouteEdit.vue'
 import RouteBusStopAdd from '@/components/RouteBusStopAdd.vue'
 // Report View
-
+import Report from '@/views/PageReport.vue'
+// Decision Maker View
+import DecisionMaker from '@/views/PageDecisionMaker.vue'
 
 Vue.use(VueRouter)
 
@@ -61,9 +63,19 @@ Vue.use(VueRouter)
         path: 'busstop',
         name: 'RouteBusStop',
         component: RouteBusStopAdd
-      }
+      },
     ]
-  }
+  },
+  {
+    path: '/report',
+    name: 'Report',
+    component: Report
+  },
+  {
+    path: '/decisionmaker',
+    name: 'DecisionMaker',
+    component: DecisionMaker
+  },
   
 ]
 
