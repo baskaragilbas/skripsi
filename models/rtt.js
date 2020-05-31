@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   RTT.associate = function(models) {
     // associations can be defined here
-    RTT.belongsTo(models.Route, {foreignKey: 'routeID', as:'route'});
+    RTT.belongsTo(models.Route, {foreignKey: 'routeID', as:'Route'});
+    RTT.belongsTo(models.Report, {foreignKey: 'reportID', as:'Report'});
   };
   return RTT;
 };

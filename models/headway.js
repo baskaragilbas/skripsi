@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Headway.associate = function(models) {
     // associations can be defined here
-    Headway.belongsTo(models.RouteBusStop, {foreignKey: 'routeBusStopID', as:'routeBusStop'});
+    Headway.belongsTo(models.RouteBusStop, {foreignKey: 'routeBusStopID', as:'RouteBusStop'});
+    Headway.belongsTo(models.Report, {foreignKey: 'reportID', as:'Report'});
   };
   return Headway;
 };

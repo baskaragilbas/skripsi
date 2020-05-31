@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Frequency.associate = function(models) {
     // associations can be defined here
-    Frequency.belongsTo(models.Route, {foreignKey: 'routeID', as:'route'});
+    Frequency.belongsTo(models.Route, {foreignKey: 'routeID', as:'Route'});
+    Frequency.belongsTo(models.Report, {foreignKey: 'reportID', as:'Report'});
   };
   return Frequency;
 };

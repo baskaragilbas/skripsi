@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   LoadFactor.associate = function(models) {
     // associations can be defined here
-    LoadFactor.belongsTo(models.RouteBusStop, {foreignKey: 'routeBusStopID', as:'routeBusStop'});
+    LoadFactor.belongsTo(models.RouteBusStop, {foreignKey: 'routeBusStopID', as:'RouteBusStop'});
+    LoadFactor.belongsTo(models.Report, {foreignKey: 'reportID', as:'Report'});
   };
   return LoadFactor;
 };
