@@ -75,13 +75,14 @@
 </template>
 
 <script>
+const db = require('@/../models/index.js')
+
 export default {
   props: {
     route: {
       type: Object
     }
   },
-
   data () {
     return {
       form: {
@@ -126,10 +127,14 @@ export default {
         '19.00-19.59',
         '20.00-20.59',
         '21.00-21.59',
-      ]
+      ],
+      db:[]
     }
   },
-
+  created(){
+    db.Route.findAll({include:{model:db.BusStop, as:'BusStop', required: true}})
+      .then(data=> this.db = (JSON.parse(JSON.stringify(data))))
+  },
   methods: {
     logmodel() {
       console.log(this.form)
