@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
 /dist
-/src/db/
 
 # local env files
 .env.local
@@ -23,3 +22,7 @@ yarn-error.log*
 
 #Electron-builder output
 /dist_electron
+
+
+src/db/app.sqlite
+src/db/weight.json

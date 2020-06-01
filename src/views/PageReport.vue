@@ -3,6 +3,7 @@
     <h1>Page Report</h1>
     <ReportList v-bind:routes="dbmock"/>
     <router-view v-bind:key="$route.path"/>
+    {{db}}
   </div>
 </template>
 
