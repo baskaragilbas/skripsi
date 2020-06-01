@@ -5,8 +5,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Report.associate = function(models) {
     // associations can be defined here
-    Route.hasMany(models.RTT);
-    Route.hasMany(models.Frequency);
+    Report.hasMany(models.RTT);
+    Report.hasMany(models.Frequency);
     
   };
   return Report;
