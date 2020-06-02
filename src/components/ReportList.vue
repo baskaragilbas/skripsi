@@ -6,7 +6,7 @@
       <b-table-simple hover small caption-top responsive>
         <ReportListItem
           v-for="route in routes"
-          v-bind:key="route.name"
+          v-bind:key="route.routeName"
           v-bind:route="route"/>
       </b-table-simple>
      </div>

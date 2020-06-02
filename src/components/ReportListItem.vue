@@ -2,8 +2,8 @@
   <div>
     <b-tr>
       <b-td colspan="12" class="mx-auto">
-        <router-link v-bind:to="{name: 'ReportForm', params: {id: route.name, route: route}}">
-          {{route.name}}
+        <router-link v-bind:to="{name: 'ReportForm', params: {id: route.routeName, route: route}}">
+          Rute  {{route.routeName}}
         </router-link>
       </b-td>
     </b-tr>
@@ -16,7 +16,7 @@ export default {
     route: {
       type: Object
     }
-  }
+  },
 }
 </script>
 
