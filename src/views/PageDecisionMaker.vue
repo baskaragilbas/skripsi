@@ -27,12 +27,6 @@
           <AppTable :items="items" :fields="fields"></AppTable>
         </b-col>
       </b-row>
-
-      <b-row class="mb-3">
-        <b-col md="3" class="ml-md-auto ml-sm-auto p-3">
-          <router-link class="btn btn-secondary" v-bind:to="{name: 'ConfigEdit'}">Edit</router-link>
-        </b-col>
-      </b-row>
     </b-container>  
   </div>
 </template>
@@ -54,10 +48,10 @@ export default {
       items: [],
       fields: [
         { key: 'row_number', label: 'No.', colType:"index" },
-        { key: 'criteria', label: 'Kriteria', colType:"text" },
-        { key: 'weight', label: 'Bobot', colType:"text" },
-        { key: 'delete', label: 'Bobot', colType:"delete" }
-      ]
+        { key: 'id', label: 'Id', colType:"text" },
+        { key: 'routeName', label: 'Rute', colType:"link" },
+        { key: 'priority', label: 'Nilai Prioritas', colType:"delete" }
+      ],
     }
   },
   created(){
