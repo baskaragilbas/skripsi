@@ -1,5 +1,5 @@
 <template>
-  <b-form>
+  <b-form v-on:submit.prevent="onSubmit">
   <div>
     <h4>Rute {{route.routeName}}</h4>
     
@@ -106,7 +106,7 @@
       </b-tfoot>
     </b-table-simple>
   </div>
-  <b-button type="submit" variant="primary" v-on:click.prevent="logForm">Submit</b-button>
+  <b-button type="submit" variant="primary">Submit</b-button>
   <b-button type="reset" variant="danger">Reset</b-button>
 </b-form>
 </template>
@@ -171,8 +171,12 @@ export default {
     }
   },
   methods: {
-    logForm () {
-      console.log(this.form)
+    onSubmit () {
+      const emitted = {
+        routeName: this.route.routeName, ...this.form
+      }
+
+      this.$emit('submitForm', emitted)
     }
   }
 }
