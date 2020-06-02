@@ -1,9 +1,8 @@
 <template>
   <div>
     <h1>Page Report</h1>
-    <ReportList v-bind:routes="dbmock"/>
+    <ReportList v-bind:routes="db"/>
     <router-view v-bind:key="$route.path"/>
-    {{db}}
   </div>
 </template>
 
@@ -22,15 +21,6 @@ export default {
   },
   data () {
     return {
-      dbmock: [
-        {
-          'name': 'route1'
-        },
-        {
-          'name': 'route2'
-        }
-      ],
-
       db:[]
     }
   },

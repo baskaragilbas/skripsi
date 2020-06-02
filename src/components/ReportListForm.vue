@@ -1,12 +1,55 @@
 <template>
   <b-form>
   <div>
-    <!-- checking if props is passed properly from ReportListItem.vue by injecting route.name -->
-    {{route.name}}
+    <h4>Rute {{route.routeName}}</h4>
     
-    <!-- TODO: 
-      v-for iteration for busstop and busstoproute(?) here.
-    -->
+    <!--Load Factor-->
+    <b-table-simple hover small caption-top responsive>
+      <caption>Load Factor</caption>
+      <b-thead head-variant="dark">
+      <b-tr>
+        <b-th colspan="4" class="mx-auto">Nama Bus</b-th>
+        <b-th colspan="3" class="mx-auto">Nilai</b-th>
+      </b-tr>
+      </b-thead>
+      <b-tbody>
+        <b-tr v-for="busStop in BusStop" v-bind:key="busStop.id">
+          <b-td colspan="5">{{busStop.busStopName}}</b-td>
+          <b-td colspan="2">
+              <b-form-input
+              id="input-1"
+              type="text"
+              v-model="form.loadFactor[busStop.id]"
+              required> 
+              </b-form-input>             
+          </b-td>
+        </b-tr>
+      </b-tbody>      
+    </b-table-simple>
+
+    <!--Headway-->
+    <b-table-simple hover small caption-top responsive>
+      <caption>Headway</caption>
+      <b-thead head-variant="dark">
+      <b-tr>
+        <b-th colspan="4" class="mx-auto">Nama Bus</b-th>
+        <b-th colspan="3" class="mx-auto">Nilai</b-th>
+      </b-tr>
+      </b-thead>
+      <b-tbody>
+        <b-tr v-for="busStop in BusStop" v-bind:key="busStop.id">
+          <b-td colspan="5">{{busStop.busStopName}}</b-td>
+          <b-td colspan="2">
+              <b-form-input
+              id="input-1"
+              type="text"
+              v-model="form.headWay[busStop.id]"
+              required> <!--v-model="form.frequency[time]"-->
+              </b-form-input>             
+          </b-td>
+        </b-tr>
+      </b-tbody>      
+    </b-table-simple>
 
     <!--Frequency-->
     <b-table-simple hover small caption-top responsive>
@@ -40,25 +83,16 @@
       <!--RTT-->
     <b-table-simple hover small caption-top responsive>
       <caption>RTT</caption>
-      <b-thead head-variant="dark">
-      <b-tr>
-        <b-th colspan="4" class="mx-auto">Waktu Tempuh</b-th>
-        <b-th colspan="3" class="mx-auto">Nilai</b-th>
-      </b-tr>
-      </b-thead>
       <b-tbody>
         <b-tr>
           <b-td colspan="5">
-            <b-form-input
-              id="input-1"
-              type="text"
-              required>
-            </b-form-input>
+            Nilai RTT
           </b-td>
           <b-td colspan="2">
             <b-form-input
               id="input-1"
               type="text"
+              v-model="form.rtt"
               required>
             </b-form-input>
           </b-td>
@@ -72,7 +106,7 @@
       </b-tfoot>
     </b-table-simple>
   </div>
-  <b-button type="submit" variant="primary">Submit</b-button>
+  <b-button type="submit" variant="primary" v-on:click.prevent="logForm">Submit</b-button>
   <b-button type="reset" variant="danger">Reset</b-button>
 </b-form>
 </template>
@@ -91,8 +125,8 @@ export default {
   data () {
     return {
       form: {
-        loadFactor: null,
-        headWay: null,
+        loadFactor: {},
+        headWay: {},
         frequency: { // make sure every null is cleared by a value when submitted.
           '05.00-05.59': null,
           '06.00-06.59': null,
@@ -132,9 +166,15 @@ export default {
         '19.00-19.59',
         '20.00-20.59',
         '21.00-21.59',
-      ]
+      ],
+      BusStop: {...this.route.BusStop}
     }
   },
+  methods: {
+    logForm () {
+      console.log(this.form)
+    }
+  }
 }
 </script>
 
