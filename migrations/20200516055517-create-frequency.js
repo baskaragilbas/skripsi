@@ -17,7 +17,7 @@ module.exports = {
         reference: {model: 'Report', key:'id'}
       },
       time: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       value: {
         type: Sequelize.INTEGER

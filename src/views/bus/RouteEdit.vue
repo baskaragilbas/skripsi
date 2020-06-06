@@ -63,8 +63,8 @@ export default {
       evt.preventDefault() 
       db.BusStop.findOrCreate({
         where: {busStopName: this.busstop}
-      }).then(data =>{
-          this.items.push(JSON.parse(JSON.stringify(data))[0])
+      }).spread(data =>{
+          this.items.unshift(JSON.parse(JSON.stringify(data)))
           db.Route.findOne({ where:{ id : this.$route.params.id}})
             .then(result => result.addBusStop(data))
         })

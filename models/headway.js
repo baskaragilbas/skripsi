@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Headway = sequelize.define('Headway', {
-    routeBusTopID: DataTypes.INTEGER,
+    routeBusStopID: DataTypes.INTEGER,
     reportID: DataTypes.INTEGER,
     value: DataTypes.STRING
   }, {});

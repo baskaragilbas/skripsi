@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const LoadFactor = sequelize.define('LoadFactor', {
-    routeBusTopID: DataTypes.INTEGER,
+    routeBusStopID: DataTypes.INTEGER,
     reportID: DataTypes.INTEGER,
     value: DataTypes.INTEGER
   }, {});

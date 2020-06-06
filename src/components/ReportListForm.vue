@@ -9,7 +9,7 @@
       <b-thead head-variant="dark">
       <b-tr>
         <b-th colspan="4" class="mx-auto">Nama Bus</b-th>
-        <b-th colspan="3" class="mx-auto">Nilai</b-th>
+        <b-th colspan="3" class="mx-auto">Nilai (Dalam Persen)</b-th>
       </b-tr>
       </b-thead>
       <b-tbody>
@@ -19,7 +19,7 @@
               <b-form-input
               id="input-1"
               type="text"
-              v-model="form.loadFactor[busStop.id]"
+              v-model="form.loadFactor[busStop.RouteBusStop.id]"
               required> 
               </b-form-input>             
           </b-td>
@@ -33,7 +33,7 @@
       <b-thead head-variant="dark">
       <b-tr>
         <b-th colspan="4" class="mx-auto">Nama Bus</b-th>
-        <b-th colspan="3" class="mx-auto">Nilai</b-th>
+        <b-th colspan="3" class="mx-auto">Nilai (Dalam Menit)</b-th>
       </b-tr>
       </b-thead>
       <b-tbody>
@@ -43,7 +43,7 @@
               <b-form-input
               id="input-1"
               type="text"
-              v-model="form.headWay[busStop.id]"
+              v-model="form.headWay[busStop.RouteBusStop.id]"
               required> <!--v-model="form.frequency[time]"-->
               </b-form-input>             
           </b-td>
@@ -57,7 +57,7 @@
       <b-thead head-variant="dark">
       <b-tr>
         <b-th colspan="4" class="mx-auto">Jam</b-th>
-        <b-th colspan="3" class="mx-auto">Nilai</b-th>
+        <b-th colspan="3" class="mx-auto">Nilai (Dalam Unit)</b-th>
       </b-tr>
       </b-thead>
       <b-tbody>
@@ -81,20 +81,18 @@
       </b-tfoot>
     </b-table-simple>
       <!--RTT-->
-    <b-table-simple hover small caption-top responsive>
+    <b-table-simple hover small caption-top>
       <caption>RTT</caption>
       <b-tbody>
-        <b-tr>
+        <b-tr rowspan="5">
           <b-td colspan="5">
             Nilai RTT
           </b-td>
           <b-td colspan="2">
-            <b-form-input
-              id="input-1"
-              type="text"
-              v-model="form.rtt"
-              required>
-            </b-form-input>
+            <b-form-timepicker
+              locale="de"
+              reset-button
+            ></b-form-timepicker>
           </b-td>
         </b-tr>
       </b-tbody>         
@@ -167,7 +165,8 @@ export default {
         '20.00-20.59',
         '21.00-21.59',
       ],
-      BusStop: {...this.route.BusStop}
+      BusStop: {...this.route.BusStop},
+      datePickerOptions: {"hourCycle":"3"}
     }
   },
   methods: {

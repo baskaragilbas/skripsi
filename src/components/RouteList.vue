@@ -52,7 +52,7 @@ export default {
       db.Route.create({
         routeName: this.route
       }).then(data => JSON.stringify(data)).then(data=>{
-        this.items.push(JSON.parse(data))
+        this.items.unshift(JSON.parse(data))
       }).then(data => this.route = '')
     },
     deleteData(data){

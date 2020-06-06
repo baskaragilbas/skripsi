@@ -52,7 +52,7 @@ export default {
       db.BusStop.create({
         busStopName: this.busstop
       }).then(data => JSON.stringify(data)).then(data=>{
-        this.items.push(JSON.parse(data))
+        this.items.unshift(JSON.parse(data))
       }).then(data => this.busstop = '')
     },
     deleteData(data){

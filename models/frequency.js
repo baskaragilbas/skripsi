@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const Frequency = sequelize.define('Frequency', {
     routeId: DataTypes.INTEGER,
     reportID: DataTypes.INTEGER,
-    time: DataTypes.INTEGER,
+    time: DataTypes.STRING,
     value: DataTypes.INTEGER
   }, {});
   Frequency.associate = function(models) {

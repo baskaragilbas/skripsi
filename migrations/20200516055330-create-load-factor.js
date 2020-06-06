@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      routeBusTopID: {
+      routeBusStopID: {
         type: Sequelize.INTEGER,
         reference: {model: 'BusStops', key:'id'}
       },

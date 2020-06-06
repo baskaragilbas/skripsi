@@ -1,6 +1,11 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const RouteBusStop = sequelize.define('RouteBusStop', {
+    id:{
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true // Automatically gets converted to SERIAL for postgres
+    },
     routeID: DataTypes.INTEGER,
     busStopID: DataTypes.INTEGER
   }, {});
