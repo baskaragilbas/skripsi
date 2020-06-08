@@ -67,6 +67,7 @@ export default {
           this.items.unshift(JSON.parse(JSON.stringify(data)))
           db.Route.findOne({ where:{ id : this.$route.params.id}})
             .then(result => result.addBusStop(data))
+          this.busstop =''
         })
     },
     deleteData(data){
