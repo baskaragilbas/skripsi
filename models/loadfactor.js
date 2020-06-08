@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const LoadFactor = sequelize.define('LoadFactor', {
     routeBusStopID: DataTypes.INTEGER,
     reportID: DataTypes.INTEGER,
-    value: DataTypes.INTEGER
+    value: DataTypes.REAL
   }, {});
   LoadFactor.associate = function(models) {
     // associations can be defined here

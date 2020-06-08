@@ -17,7 +17,7 @@ module.exports = {
         reference: {model: 'Report', key:'id'}
       },
       value: {
-        type: Sequelize.INTEGER
+        type: Sequelize.REAL
       },
       createdAt: {
         allowNull: false,
