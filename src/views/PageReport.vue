@@ -11,6 +11,17 @@
       v-bind:key="$route.path" 
       v-on:submitForm="submitForm"/>
     </div>
+    <div>
+      <b-alert
+      :show="dismissCountDown"
+      dismissible
+      variant="success"
+      @dismissed="dismissCountDown=0"
+      @dismiss-count-down="countDownChanged"
+    >
+      <p>Input Berhasil</p>
+    </b-alert>
+    </div>
   </div>
 </template>
 
@@ -31,11 +42,14 @@ export default {
     return {
       db:[],
       reportDate: null,
+      dismissSecs: 3,
+      dismissCountDown: 0
     }
   },
   created(){
     db.Route.findAll({include:{model:db.BusStop, as:'BusStop', required: true}})
       .then(data=> this.db = (JSON.parse(JSON.stringify(data))))
+    console.log('halo')
   },
   methods: {
     submitForm (formData) {
@@ -100,9 +114,13 @@ export default {
           })
           
         })
-      })
-      
-      console.log(frequency)
+      }).then(()=> this.showAlert())
+    },
+    countDownChanged(dismissCountDown) {
+        this.dismissCountDown = dismissCountDown
+      },
+    showAlert() {
+      this.dismissCountDown = this.dismissSecs
     }
   }
 }

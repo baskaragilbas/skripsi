@@ -91,6 +91,7 @@
           <b-td colspan="2">
             <b-form-timepicker
               locale="de"
+              v-model="form.rtt"
               reset-button
             ></b-form-timepicker>
           </b-td>
