@@ -3,6 +3,8 @@ module.exports = (sequelize, DataTypes) => {
   const RTT = sequelize.define('RTT', {
     routeId: DataTypes.INTEGER,
     reportID: DataTypes.INTEGER,
+    day: DataTypes.STRING,
+    minute: DataTypes.INTEGER,
     value: DataTypes.STRING
   }, {});
   RTT.associate = function(models) {

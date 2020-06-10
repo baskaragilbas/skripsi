@@ -16,6 +16,12 @@ module.exports = {
         type: Sequelize.INTEGER,
         reference: {model: 'Report', key:'id'}
       },
+      day: {
+        type: Sequelize.STRING
+      },
+      minute: {
+        type: Sequelize.INTEGER
+      },
       value: {
         type: Sequelize.STRING
       },

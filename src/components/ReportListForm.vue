@@ -81,18 +81,23 @@
       </b-tfoot>
     </b-table-simple>
       <!--RTT-->
-    <b-table-simple hover small caption-top>
+    <b-table-simple hover small caption-top responsive>
       <caption>RTT</caption>
+      <b-thead head-variant="dark">
+      <b-tr>
+        <b-th colspan="4" class="mx-auto">Hari</b-th>
+        <b-th colspan="3" class="mx-auto">Nilai (Dalam Jam)</b-th>
+      </b-tr>
+      </b-thead>
       <b-tbody>
-        <b-tr rowspan="5">
-          <b-td colspan="5">
-            Nilai RTT
-          </b-td>
+        <b-tr v-for="day in days" v-bind:key="day">
+          <b-td colspan="5">{{day}}</b-td>
           <b-td colspan="2">
-            <b-form-timepicker
+              <b-form-timepicker
               locale="de"
-              v-model="form.rtt"
+              v-model="form.rtt[day]"
               reset-button
+              required
             ></b-form-timepicker>
           </b-td>
         </b-tr>
@@ -145,7 +150,11 @@ export default {
           '20.00-20.59': null,
           '21.00-21.59': null,
         },
-        rtt: null
+        rtt: {
+          'Senin' : null,
+          'Rabu' : null,
+          'Minggu' : null
+        }
       },
       times: [
         '05.00-05.59',
@@ -166,6 +175,11 @@ export default {
         '20.00-20.59',
         '21.00-21.59',
       ],
+      days: [
+        'Senin',
+        'Rabu',
+        'Minggu'
+      ],
       BusStop: {...this.route.BusStop},
       datePickerOptions: {"hourCycle":"3"}
     }
@@ -175,7 +189,6 @@ export default {
       const emitted = {
         routeName: this.route.routeName, ...this.form
       }
-
       this.$emit('submitForm', emitted)
     }
   }

@@ -48,13 +48,14 @@ export default {
   },
   created(){
     db.Route.findAll({include:{model:db.BusStop, as:'BusStop', required: true}})
-      .then(data=> this.db = (JSON.parse(JSON.stringify(data))))
-    console.log('halo')
+      .then(data=> this.db = (JSON.parse(JSON.stringify(data)))).then(data => console.log(data))
   },
   methods: {
     submitForm (formData) {
       let frequency = []
+      let rtt = []
       Object.keys(formData.frequency).forEach(key => frequency.push({time:key, value:formData.frequency[key]}))
+      Object.keys(formData.rtt).forEach(key => rtt.push({day:key, value:formData.rtt[key]}))
       
 
       db.Report.findOrCreate({where:{reportDate: this.reportDate}}).spread(report=>{
@@ -102,17 +103,21 @@ export default {
               }
             })
           })
-          db.RTT.findOne({where:{reportID:report.id,routeID:route.id}}).then(result=>{
-            if(result==null){
-              db.RTT.create({value:formData.rtt}).then(rtt =>{
-                report.addRTT(rtt)
-                route.addRTT(rtt)
-              })
-            }else{
-              result.update({value:formData.rtt})
-            }
+          rtt.map(obj =>{
+            let split = obj.value.split(':')
+            let minute = (+split[0])*60 +(+split[1]) 
+            obj.minute = minute 
+            db.RTT.findOne({where:{reportID:report.id,routeID:route.id,day:obj.day}}).then(result =>{
+              if(result==null){
+                db.RTT.create(obj).then(data =>{
+                  report.addRTT(data)
+                  route.addRTT(data)
+                })
+              }else{
+                result.update({value:obj.value, day:obj.day, minute:obj.minute})
+              }
+            })
           })
-          
         })
       }).then(()=> this.showAlert())
     },
