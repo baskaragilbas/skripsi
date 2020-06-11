@@ -34,8 +34,7 @@ export default {
       fields: [
         { key: 'row_number', label: 'No.', colType:"index" },
         { key: 'criteria', label: 'Kriteria', colType:"text" },
-        { key: 'weight', label: 'Bobot', colType:"text" },
-        { key: 'delete', label: 'Bobot', colType:"delete" }
+        { key: 'weight', label: 'Bobot', colType:"text" }
       ]
     }
   }
