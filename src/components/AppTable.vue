@@ -39,7 +39,7 @@ export default {
     },
     onClickRedirect(data) {
       data.preventDefault
-      this.$router.push('/route/' + data.item.id + '/edit')
+      this.$emit('redirect',data.item.id)
     }
   }
 }

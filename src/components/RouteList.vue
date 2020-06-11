@@ -12,7 +12,7 @@
       </b-form>
       <br>
       <div>
-        <AppTable :items="items" :fields="fields" @deleteData="deleteData"></AppTable>
+        <AppTable :items="items" :fields="fields" @deleteData="deleteData" @redirect="redirectPage"></AppTable>
       </div>
     </div>
 </template>
@@ -66,6 +66,9 @@ export default {
         this.$nextTick(() => {
           this.renderComponent = true
         })
+    },
+    redirectPage(data){
+      this.$router.push('/route/' + data + '/edit')
     }
   }
 
