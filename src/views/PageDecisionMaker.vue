@@ -8,15 +8,15 @@
           <b-form-select
                 class="mb-2 mr-sm-2 mb-sm-0"
                 v-model="start"
-                :options="[{text: 'Tanggal Selesai', value: null},...startdate]"
+                :options="[{text: 'Tanggal Mulai', value: null},...startdate]"
                 on:blur="generateEndDate(start)"
                 required >
               </b-form-select>
           <b-form-select
                 class="mb-2 mr-sm-2 mb-sm-0"
                 v-model="end"
-                :options="[{text: 'Tanggal Mulai', value: null},...enddate]"
-                required >
+                :options="[{text: 'Tanggal Selesai', value: null},...enddate]"
+                >
               </b-form-select>
         </div>
 
@@ -33,7 +33,12 @@
 
 <script>
 import AppTable from '@/components/AppTable.vue';
+const { Op } = require("sequelize")
+const sequelize = require('electron').remote.getGlobal('sequelize')
 const db = require('@/../models/index.js')
+
+const topsis = require('@/helper/topsis.js')
+import weight from '@/db/weight.json'
 
 export default {
   components: {
@@ -43,23 +48,147 @@ export default {
     return{
       startdate: [],
       start: null,
-      enddate: [],
       end: null,
       items: [],
       fields: [
         { key: 'row_number', label: 'No.', colType:"index" },
-        { key: 'id', label: 'Id', colType:"text" },
+        { key: 'routeId', label: 'Id', colType:"text" },
         { key: 'routeName', label: 'Rute', colType:"link" },
-        { key: 'priority', label: 'Nilai Prioritas', colType:"delete" }
+        { key: 'value', label: 'Nilai Prioritas', colType:"text" }
       ],
     }
   },
+  computed:{
+    enddate: function () {
+      if (this.start == null){
+        return []
+      }else{
+        return this.startdate.filter(data => data > this.start )
+      }
+    }
+  },
   created(){
-    db.Report.findAll().then(data=> this.startdate = JSON.parse(JSON.stringify(data)))
+    db.Report.findAll({raw:true}).then(data=> this.startdate = data.map(report => report.reportDate))
   },
   methods:{
     onSubmit(evt){
-      evt.preventDefault
+      evt.preventDefault()
+
+      let query = (this.end == null) ?
+       " = '" + this.start + "' " :
+       " BETWEEN ' " + this.start + " ' AND '" + this.end + " ' " 
+      console.log(query)
+      const headway = db.sequelize.query(
+        'SELECT routeId, AVG(average) AS average ' +
+        'FROM '+
+        '( ' +
+        'SELECT Headways.routeBusStopID, RouteBusStops.routeId, AVG(value) AS average ' +
+        'FROM Reports ' +
+        'LEFT JOIN Headways ON Reports.id = Headways.reportID ' +
+        'LEFT JOIN RouteBusStops on Headways.routeBusStopID = RouteBusStops.id '+
+        'WHERE Reports.reportDate' + query +
+        'GROUP BY Headways.routeBusStopID ' +
+        ')' +
+        'GROUP BY routeId ' +
+        'ORDER BY routeId'
+        )
+
+      const loadfactor = db.sequelize.query(
+        'SELECT routeId, AVG(average) AS average ' +
+        'FROM '+
+        '( ' +
+          'SELECT LoadFactors.routeBusStopID, RouteBusStops.routeId, AVG(value) AS average ' +
+          'FROM Reports ' +
+          'LEFT JOIN LoadFactors ON Reports.id = LoadFactors.reportID ' +
+          'LEFT JOIN RouteBusStops on LoadFactors.routeBusStopID = RouteBusStops.id '+
+          'WHERE Reports.reportDate =' + "'" + this.start + "' " +
+          'GROUP BY LoadFactors.routeBusStopID ' +
+        ')' +
+        'GROUP BY routeId '+
+        'ORDER BY routeId'
+        )
+      
+      const frequency = db.sequelize.query(
+        'SELECT routeId, ROUND(AVG(average)) AS average FROM ' +
+        '( ' +
+          'SELECT Frequencies.routeID, Frequencies.time, AVG(value) AS average FROM Reports ' + 
+          'LEFT JOIN Frequencies ON Reports.id = Frequencies.reportID ' +
+          'WHERE Reports.reportDate' + query +
+          'GROUP BY Frequencies.routeId, Frequencies.time ' +
+        ') ' +
+        'GROUP BY routeId ' +
+        'ORDER BY routeId'
+      )
+
+      const rtt = db.sequelize.query(
+        'SELECT RTTs.routeID,  AVG(RTTs.minute) AS average FROM Reports ' +
+        'LEFT JOIN RTTs ON Reports.id = RTTs.reportID ' +
+        'WHERE Reports.reportDate' + query +
+        'GROUP BY RTTs.routeId, Reports.id ' +
+        'ORDER BY routeId'
+      )
+
+      const rttdistance = db.sequelize.query(
+        'SELECT RTTs.routeId, RTTs.reportID, SUM((RTTs.minute-t.average)*(RTTs.minute-t.average))/(COUNT(t.reportID)-1) AS distance ' +
+        'FROM RTTs JOIN ( ' + 
+            'SELECT RTTs.routeID, RTTs.ReportId, AVG(RTTs.minute) AS average FROM Reports ' + 
+            'LEFT JOIN RTTs ON Reports.id = RTTs.reportID ' + 
+            'WHERE Reports.reportDate ' + query +
+            'GROUP BY RTTs.routeId, Reports.id ) AS t ' +
+        'on RTTs.routeId = t.routeId AND RTTs.reportID = t.reportID ' +
+        'GROUP BY RTTS.routeId, RTTs.reportID ' +
+        'ORDER BY t.routeId, t.reportID '
+      )
+      let ureport = db.sequelize.query(
+        'SELECT t2.routeId, count(t2.reportID) as counter FROM  ( ' + 
+        'SELECT RTTs.routeID, RTTs.ReportId, AVG(RTTs.minute) AS average FROM Reports ' + 
+        'LEFT JOIN RTTs ON Reports.id = RTTs.reportID ' + 
+        'WHERE Reports.reportDate ' + query +
+        'GROUP BY RTTs.routeId, Reports.id) AS t2 ' +
+        'GROUP By t2.routeId ' +
+        'ORDER BY routeId'
+
+      )
+      let uroute = db.sequelize.query(
+        'SELECT DISTINCT RTTs.routeId, Routes.routeName from Reports ' +
+        'JOIN Routes ON Routes.id = RTTS.routeId ' +
+        'LEFT JOIN RTTs ON Reports.id = RTTs.reportID '  +
+        'WHERE Reports.reportDate ' + query +
+        'ORDER BY RTTs.routeId'
+      )
+        
+        Promise.all([headway, loadfactor, frequency,rttdistance,ureport,uroute])
+          .then( ([headway, loadfactor, frequency,rttdistance,ureport,uroute]) => {
+            let rttavg = uroute[0].map( x => {
+              x.value = 0
+              return x
+            })
+
+            rttdistance[0].map(obj => rttavg.find(x => x.routeId == obj.routeId).value += Math.sqrt(obj.distance)/(ureport[0].find(x => x.routeId = obj.routeId).counter))
+            let decisionmatrix = [loadfactor[0].map( x => x.average), headway[0].map(x =>x.average), frequency[0].map(x => x.average), rttavg.map(x => x.value) ]
+            let criteriatype = [true,true,false,true]
+  
+            let dm = topsis.TOPSIS(decisionmatrix, weight.map(x => x.weight), criteriatype)
+            rttavg.map((x,index) => x.value = dm[index])
+            return rttavg
+
+          }).then(data =>this.items = data)
+
+
+          
+        // BETWEEN '2019-12-08' AND '2020-01-01'
+      // if(this.end == null){
+      //   db.Report.findAll({
+      //     where:{reportDate:this.start}, 
+      //     include:[{
+      //       model:db.RTT,
+      //       as: 'RTTs',
+      //       attributes:[],
+      //     }]
+      //     }).then(data => console.log(data))
+      // }else{
+      //   db.Report.findAll({where:{reportDate:{[Op.between]:[this.start,this.end]}}, include:[db.RTT]}).then(data => console.log(data))
+      // }
     },
     generateEndDate(start){
       this.enddate = this.date.filter( date =>  data > start)
