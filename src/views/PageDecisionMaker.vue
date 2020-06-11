@@ -24,7 +24,7 @@
       </b-form>
       <b-row class="mb-3">
         <b-col>
-          <AppTable :items="items" :fields="fields"></AppTable>
+          <AppTable :items="items" :fields="fields" @redirect="redirectPage" ></AppTable>
         </b-col>
       </b-row>
     </b-container>  
@@ -173,25 +173,13 @@ export default {
             return rttavg
 
           }).then(data =>this.items = data)
-
-
-          
-        // BETWEEN '2019-12-08' AND '2020-01-01'
-      // if(this.end == null){
-      //   db.Report.findAll({
-      //     where:{reportDate:this.start}, 
-      //     include:[{
-      //       model:db.RTT,
-      //       as: 'RTTs',
-      //       attributes:[],
-      //     }]
-      //     }).then(data => console.log(data))
-      // }else{
-      //   db.Report.findAll({where:{reportDate:{[Op.between]:[this.start,this.end]}}, include:[db.RTT]}).then(data => console.log(data))
-      // }
     },
     generateEndDate(start){
       this.enddate = this.date.filter( date =>  data > start)
+    },
+    redirectPage(data){
+      //data is the id of the route, url scheme need to be created first
+      //this.$router.push( data )
     }
   }
 }
