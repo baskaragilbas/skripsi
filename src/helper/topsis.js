@@ -40,7 +40,7 @@ function euclidianDistanceWithIdealSolution(matrix,ideal){
 }
 
 function CCI(matrix){
-    console.log(matrix)
+
     let cci = matrix.map( row => row[1]/(row[0]+row[1]))
 
     return cci
@@ -64,3 +64,7 @@ function TOPSIS(matrix, weight, type){
 
     return cci
 }
+
+module.exports = {
+    TOPSIS : TOPSIS
+} 
