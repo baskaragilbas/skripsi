@@ -51,10 +51,10 @@ export default {
       end: null,
       items: [],
       fields: [
-        { key: 'row_number', label: 'No.', colType:"index" },
-        { key: 'routeId', label: 'Id', colType:"text" },
-        { key: 'routeName', label: 'Rute', colType:"link" },
-        { key: 'value', label: 'Nilai Prioritas', colType:"text" }
+        { key: 'row_number', label: 'No.', colType:"index"},
+        { key: 'routeId', label: 'Id', colType:"text", sortable:true },
+        { key: 'routeName', label: 'Rute', colType:"link", sortable:true },
+        { key: 'value', label: 'Nilai Prioritas', colType:"text", sortable:true }
       ],
     }
   },
