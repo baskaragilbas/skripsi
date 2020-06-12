@@ -21,7 +21,7 @@
 <script>
 
 import AppTable from '@/components/AppTable.vue';
-import json from '@/db/weight.json'
+const db = require('@/../models/index.js')
 
 export default {
   name: 'Config', 
@@ -30,13 +30,24 @@ export default {
   },
   data(){
     return{
-      weight: json,
+      weight: null,
       fields: [
         { key: 'row_number', label: 'No.', colType:"index" },
-        { key: 'criteria', label: 'Kriteria', colType:"text" },
+        { key: 'criteriaName', label: 'Kriteria', colType:"text" },
+        { key: 'criteriaType', label: 'Kriteria', colType:"text" },
         { key: 'weight', label: 'Bobot', colType:"text" }
       ]
     }
+  },
+  created(){
+    db.Criteria.findAll({raw:true})
+    .then(data => data.map(x => {
+        x.criteriaType = (x.criteriaType == 1) ? 'Benefit':'Cost'
+        return x
+      }
+    )
+  )
+    .then(data => this.weight = data)
   }
 }
 </script>

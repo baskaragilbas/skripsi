@@ -38,7 +38,6 @@ const sequelize = require('electron').remote.getGlobal('sequelize')
 const db = require('@/../models/index.js')
 
 const topsis = require('@/helper/topsis.js')
-import weight from '@/db/weight.json'
 
 export default {
   components: {
@@ -156,9 +155,11 @@ export default {
         'WHERE Reports.reportDate ' + query +
         'ORDER BY RTTs.routeId'
       )
+
+      let criteria = db.Criteria.findAll({raw:true})
         
-        Promise.all([headway, loadfactor, frequency,rttdistance,ureport,uroute])
-          .then( ([headway, loadfactor, frequency,rttdistance,ureport,uroute]) => {
+        Promise.all([headway, loadfactor, frequency, rttdistance, ureport, uroute, criteria])
+          .then( ([headway, loadfactor, frequency, rttdistance, ureport, uroute, criteria]) => {
             let rttavg = uroute[0].map( x => {
               x.value = 0
               return x
@@ -166,9 +167,9 @@ export default {
 
             rttdistance[0].map(obj => rttavg.find(x => x.routeId == obj.routeId).value += Math.sqrt(obj.distance)/(ureport[0].find(x => x.routeId = obj.routeId).counter))
             let decisionmatrix = [loadfactor[0].map( x => x.average), headway[0].map(x =>x.average), frequency[0].map(x => x.average), rttavg.map(x => x.value) ]
-            let criteriatype = [true,true,false,true]
+            let criteriatype = criteria.map(x => x.criteriaType)
   
-            let dm = topsis.TOPSIS(decisionmatrix, weight.map(x => x.weight), criteriatype)
+            let dm = topsis.TOPSIS(decisionmatrix, criteria.map(x => x.weight), criteriatype)
             rttavg.map((x,index) => x.value = dm[index])
             return rttavg
 

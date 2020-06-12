@@ -149,13 +149,14 @@
           <caption>Ubah Bobot</caption>
           <b-thead head-variant="dark">
           <b-tr>
-            <b-th colspan="4" class="mx-auto">Kriteria</b-th>
-            <b-th colspan="3" class="mx-auto">Bobot</b-th>
+            <b-th colspan="3" class="mx-auto">Kriteria</b-th>
+            <b-th colspan="2" class="mx-auto">Bobot</b-th>
+            <b-th colspan="2" class="mx-auto">Tipe</b-th>
           </b-tr>
           </b-thead>
           <b-tbody>
           <b-tr>
-            <b-td colspan="5">Load Factor</b-td>
+            <b-td colspan="3">Load Factor</b-td>
             <b-td colspan="2">
                 <b-form-input
                 id="input-1"
@@ -164,9 +165,17 @@
                 required>
                 </b-form-input>
             </b-td>
+             <b-td colspan="2">
+              <b-form-select
+                id="input-3"
+                v-model="form.type[0]"
+                :options="type"
+                required>
+              </b-form-select>
+            </b-td>
           </b-tr>
             <b-tr>
-              <b-td colspan="5">Headway</b-td>
+              <b-td colspan="3">Headway</b-td>
               <b-td colspan="2">
                 <b-form-input
                 id="input-1"
@@ -175,9 +184,17 @@
                 required>
                 </b-form-input>
               </b-td>
+              <b-td colspan="2">
+                <b-form-select
+                  id="input-3"
+                  v-model="form.type[1]"
+                  :options="type"
+                  required>
+                </b-form-select>
+              </b-td>
             </b-tr>
             <b-tr>
-              <b-td colspan="5">Frekuensi</b-td>
+              <b-td colspan="3">Frekuensi</b-td>
               <b-td colspan="2">
                 <b-form-input
                 id="input-1"
@@ -186,9 +203,17 @@
                 required>
                 </b-form-input>
               </b-td>
+              <b-td colspan="2">
+              <b-form-select
+                id="input-3"
+                v-model="form.type[2]"
+                :options="type"
+                required>
+              </b-form-select>
+              </b-td>
             </b-tr>
             <b-tr>
-              <b-td colspan="5">RTT</b-td>
+              <b-td colspan="3">RTT</b-td>
               <b-td colspan="2">
                 <b-form-input
                 id="input-1"
@@ -196,6 +221,14 @@
                 v-model="form.criteria_weight[3]"
                 required>
                 </b-form-input>
+              </b-td>
+              <b-td colspan="2">
+                <b-form-select
+                  id="input-3"
+                  v-model="form.type[3]"
+                  :options="type"
+                  required>
+                </b-form-select>
               </b-td>
             </b-tr>
             </b-tbody>
@@ -214,36 +247,51 @@
 </template>
 
 <script>
-import json from '@/db/weight.json'
 import * as AHPHelper from "@/helper/ahp.js"
 import fs from 'fs'
+import { isNull } from 'util'
+const db = require('@/../models/index.js')
 
-const def = {
+
+let def = {
     message: 'Gunakan form diatas untuk menemukan bobot berdasarkan perbandingan masing-masing kriteria, atau langsung input bobot ke kolom di bawah',
     weight: [1,1,1,1,1,1],
     modifier:[1,1,1,1,1,1],
-    criteria_weight: json.map(function(x){return x.weight}),
+    criteria:[],
     weights: [1,2,3,4,5,6,7,8,9]
 }
+
 export default {
   data() {
     return {
       form: {
         weight: def.weight,
         modifier:def.modifier,
-        criteria_weight:def.criteria_weight
+        criteria_weight:[],
+        type:[]
       },
       message: def.message,
       weights: [1,2,3,4,5,6,7,8,9],
+      type:[{text:'Benefit', value:1},{text:'Cost', value:0}],
       important: [{text: 'Kuat', value: 1}, {text: 'Lemah', value: -1}],
-      show: true,
-      submit: null
+      show: true
     }
+  },
+  created(){
+    db.Criteria.findAll({raw:true}).then(data =>  {
+      def.criteria = data
+      def.criteria.map(x =>{
+
+        this.form.criteria_weight.push(x.weight)
+        this.form.type.push(x.criteriaType)
+        
+      })
+    })
   },
   methods: {
     onCheck(evt) {
       evt.preventDefault()
-      result = AHPHelper.AHP(AHPHelper.generateMatrix(this.form.weight,this.form.modifier))
+      let result = AHPHelper.AHP(AHPHelper.generateMatrix(this.form.weight,this.form.modifier))
       this.form.criteria_weight = result.weight
         console.log(result)
         this.message = ('Bobot yang dihasilkan memiliki rasio konsistensi sebesar '
@@ -256,31 +304,32 @@ export default {
     },
     onSubmit(evt) {
         evt.preventDefault()
-        this.submit =(
-            '[{"criteria":"Load Factor","weight":'
-            + this.form.criteria_weight[0]
-            + '},{"criteria":"Headway","weight":'
-            + this.form.criteria_weight[1]
-            + '},{"criteria":"Frekuensi","weight":'
-            + this.form.criteria_weight[2]
-            + '},{"criteria":"RTT","weight":'
-            + this.form.criteria_weight[3]+'}]'
-        )
-        fs.writeFile('./src/db/weight.json', this.submit, err => {
-          if (err) {
-              console.log('Error writing file', err)
-          } else {
-              this.$router.push('/config');
-          }
-      })
-    },
+        let submit = def.criteria.map((x,y) =>{
+          x.weight = this.form.criteria_weight[y],
+          x.type = this.form.type[y]
+          return x
+        })
+     
+        submit.map( x => {
+          db.Criteria.update({
+            weight : x.weight,
+            type : x.criteriaType,
+          }, {
+            where : {
+            id : x.id
+            }
+          })
+        })  
+        this.$router.push('/config')
+       },
     onReset(evt) {
       evt.preventDefault()
       // Reset our form values
-      this.form.weight = def.weight
+      this.form.weight = def.criteria.map(x=> x.weight)
+      this.form.type = def.criteria.map(x=> x.criteriaType)
       this.form.modifier = def.modifier
       this.message = def.message
-      this.submit = null
+      console.log(this.form)
       // Trick to reset/clear native browser form validation state
       this.show = false
       this.$nextTick(() => {

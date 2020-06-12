@@ -25,4 +25,3 @@ yarn-error.log*
 
 
 src/db/app.sqlite
-src/db/weight.json
