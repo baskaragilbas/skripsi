@@ -4,13 +4,13 @@ const transpose = array => array[0].map((x,i) => array.map(x => x[i]))
 
 
 function generateMatrix(weight,modifier) {
-    matrix =[
+    let matrix =[
         [1,null,null,null],
         [null,1,null,null],
         [null,null,1,null],
         [null,null,null,1]
     ];
-    for (i=0; i<weight.length; i++) {
+    for (let i=0; i<weight.length; i++) {
         if(i<3){
             matrix[0][i+1] = Math.pow(weight[i],modifier[i])
             matrix[i+1][0] = 1/matrix[0][i+1]
@@ -27,9 +27,9 @@ function generateMatrix(weight,modifier) {
 }
 
 function rowMatrix(matrix) {
-    row_matrix = []
+    let row_matrix = []
     
-    for (i=0; i<matrix.length; i++) {
+    for (let i=0; i<matrix.length; i++) {
         row_matrix.push(
             matrix[i].reduce(sum)
         )
@@ -39,9 +39,9 @@ function rowMatrix(matrix) {
 }
 
 function colMatrix(matrix) {
-    col_matrix =[]
-    tMatrix = transpose(matrix)
-    for (i=0; i<tMatrix.length; i++) {
+    let col_matrix =[]
+    let tMatrix = transpose(matrix)
+    for (let i=0; i<tMatrix.length; i++) {
         col_matrix.push(
             tMatrix[i].reduce(sum)
         )
@@ -52,10 +52,10 @@ function colMatrix(matrix) {
 
 function normalize(matrix){
 
-    tMatrix =transpose(matrix)
-    col_matrix = colMatrix(matrix)
-    normalize_matrix = []
-    for (i=0; i<tMatrix.length; i++) {
+    let tMatrix =transpose(matrix)
+    let col_matrix = colMatrix(matrix)
+    let normalize_matrix = []
+    for (let i=0; i<tMatrix.length; i++) {
         normalize_matrix.push(tMatrix[i].map(function(x){return x/col_matrix[i]}))
       }
       
@@ -63,33 +63,33 @@ function normalize(matrix){
 }
 
 function eigenVector(matrix){
-    geo_mean = []
+    let geo_mean = []
     
-    for (i=0; i<matrix.length; i++) {
-        mean = Math.pow(matrix[i].reduce(prod),1/4)
+    for (let i=0; i<matrix.length; i++) {
+        let mean = Math.pow(matrix[i].reduce(prod),1/4)
         geo_mean[i] = mean
       }
 
-    sumGeoMean = geo_mean.reduce(sum)
+    let sumGeoMean = geo_mean.reduce(sum)
     
-    result = geo_mean.map(function(x){return x/sumGeoMean})
+    let result = geo_mean.map(function(x){return x/sumGeoMean})
     return result
 }
 
 function eigenValue(matrix){
-    eigen_vector = eigenVector(matrix)
-    eigen_value = []
-    for (i=0; i<matrix.length; i++) {
+    let eigen_vector = eigenVector(matrix)
+    let eigen_value = []
+    for (let i=0; i<matrix.length; i++) {
         eigen_value.push(matrix[i].map(function(x, index ){ return x*eigen_vector[index]}).reduce(sum))
       }
-    result = (eigen_value.map(function(x,key){return x/ eigen_vector[key]}).reduce(sum))/eigen_value.length
+    let result = (eigen_value.map(function(x,key){return x/ eigen_vector[key]}).reduce(sum))/eigen_value.length
     return result
 }
 
 function consistency (matrix){
-    eigen_value = eigenValue(matrix)
+    let eigen_value = eigenValue(matrix)
 
-    CR = ((eigen_value-4)/(4))/(0.90)
+    let CR = ((eigen_value-4)/(4))/(0.90)
 
     return CR
 }
@@ -97,14 +97,14 @@ function consistency (matrix){
 function AHP (matrix) {
     
     //Finding the weight
-    normalize_matrix = normalize(matrix)
+    let normalize_matrix = normalize(matrix)
 
-    row_matrix = rowMatrix(normalize_matrix)
-    weight = row_matrix.map(function(x){return x/4})
+    let row_matrix = rowMatrix(normalize_matrix)
+    let weight = row_matrix.map(function(x){return x/4})
     
     //Finding the Consistency Ratio
-    CR = consistency(matrix)
-    ahp = {
+    let CR = consistency(matrix)
+    let ahp = {
         ['weight'] : weight,
         ['consistency'] : CR
     }
