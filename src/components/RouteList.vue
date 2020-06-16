@@ -68,7 +68,7 @@ export default {
         })
     },
     redirectPage(data){
-      this.$router.push('/route/' + data + '/edit')
+      this.$router.push('/route/' + data.id + '/edit')
     }
   }
 
