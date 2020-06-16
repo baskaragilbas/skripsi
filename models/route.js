@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     Route.belongsToMany(models.BusStop, {through: 'RouteBusStop', foreignKey: 'routeID', as: 'BusStop'});
     Route.hasMany(models.RTT);
     Route.hasMany(models.Frequency);
+    Route.hasMany(models.RouteBusStop);
   };
   return Route;
 };

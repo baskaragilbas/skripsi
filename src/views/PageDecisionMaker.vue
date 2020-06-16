@@ -173,7 +173,21 @@ export default {
             rttavg.map((x,index) => x.value = dm[index])
             return rttavg
 
-          }).then(data =>this.items = data)
+          }).then(data =>this.items = data).then(data =>{
+            db.Report.findAll({include:[{
+              model: db.RTT
+            },{
+              model: db.Frequency,
+            },{
+              model: db.Headway
+            },{
+              model: db.LoadFactor
+            }],where:{
+              reportDate: (this.end == null) ? this.start : {
+                [Op.between]:[this.start, this.end]
+              }
+            }}).then(data=> console.log(JSON.parse(JSON.stringify(data))))
+          })
     },
     generateEndDate(start){
       this.enddate = this.date.filter( date =>  data > start)
