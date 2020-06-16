@@ -180,7 +180,7 @@ export default {
     },
     redirectPage(data){
       //data is the id of the route, url scheme need to be created first
-      this.$router.push({name:'DecisionMakerRouteReport', params: {id: data.routeId}})
+      //this.$router.push( data )
     }
   }
 }
