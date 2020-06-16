@@ -34,7 +34,6 @@
 <script>
 import AppTable from '@/components/AppTable.vue';
 const { Op } = require("sequelize")
-const sequelize = require('electron').remote.getGlobal('sequelize')
 const db = require('@/../models/index.js')
 
 const topsis = require('@/helper/topsis.js')
@@ -70,13 +69,19 @@ export default {
     db.Report.findAll({raw:true}).then(data=> this.startdate = data.map(report => report.reportDate))
   },
   methods:{
+    groupBy(xs, key) {
+        return xs.reduce(function(rv, x) {
+          (rv[x[key]] = rv[x[key]] || []).push(x)
+
+          return rv
+        }, {})
+    },
     onSubmit(evt){
       evt.preventDefault()
 
       let query = (this.end == null) ?
        " = '" + this.start + "' " :
        " BETWEEN ' " + this.start + " ' AND '" + this.end + " ' " 
-      console.log(query)
       const headway = db.sequelize.query(
         'SELECT routeId, AVG(average) AS average ' +
         'FROM '+
@@ -173,28 +178,94 @@ export default {
             rttavg.map((x,index) => x.value = dm[index])
             return rttavg
 
-          }).then(data =>this.items = data).then(data =>{
-            db.Report.findAll({include:[{
-              model: db.RTT
-            },{
-              model: db.Frequency,
-            },{
-              model: db.Headway
-            },{
-              model: db.LoadFactor
-            }],where:{
-              reportDate: (this.end == null) ? this.start : {
-                [Op.between]:[this.start, this.end]
-              }
-            }}).then(data=> console.log(JSON.parse(JSON.stringify(data))))
-          })
+          }).then(data =>this.items = data)
+          
     },
     generateEndDate(start){
       this.enddate = this.date.filter( date =>  data > start)
     },
     redirectPage(data){
       //data is the id of the route, url scheme need to be created first
-      this.$router.push({name:'DecisionMakerRouteReport', params: {id: data.routeId}})
+      let lf = db.Report.findAll({
+        include:[{
+              model: db.LoadFactor,
+              as: 'LoadFactors',
+              include:[{
+                model: db.RouteBusStop,
+                as: 'RouteBusStop',
+                include:[{
+                  model:db.BusStop,
+                  as: 'BusStop'
+                }],
+                where:{
+                routeId: data.routeId
+              },
+
+              }]
+            }],
+        attributes:['stringDate'],
+        where:{
+              reportDate: (this.end == null) ? this.start : {
+                [Op.between]:[this.start, this.end]
+              }
+            }})
+
+      let hw = db.Report.findAll({
+        include:[{
+              model: db.Headway,
+              as: 'Headways',
+              include:[{
+                model: db.RouteBusStop,
+                as: 'RouteBusStop',
+                include:[{
+                  model:db.BusStop,
+                  as: 'BusStop'
+                }],
+                where:{
+                routeId: data.routeId
+              }
+              }]
+            }],
+        attributes:['stringDate'],
+        where:{
+              reportDate: (this.end == null) ? this.start : {
+                [Op.between]:[this.start, this.end]
+              }
+            }})
+      let fq = db.Report.findAll({
+        include:[{
+              model: db.Frequency,
+              as: 'Frequencies',
+              where:{
+                routeId: data.routeId
+              }
+            }],
+        attributes:['stringDate'],
+        where:{
+              reportDate: (this.end == null) ? this.start : {
+                [Op.between]:[this.start, this.end]
+              }
+            }})
+      
+      let rtt = db.Report.findAll({
+        include:[{
+              model: db.RTT,
+              as: 'RTTs',
+              where:{
+                routeId: data.routeId
+              }
+            }],
+        attributes:['stringDate'],
+        where:{
+              reportDate: (this.end == null) ? this.start : {
+                [Op.between]:[this.start, this.end]
+              }
+            }})
+      Promise.all([lf,hw,fq,rtt]).then(([lf,hw,fq,rtt])=>{
+      let array = [...JSON.parse(JSON.stringify(lf)),...JSON.parse(JSON.stringify(hw)),...JSON.parse(JSON.stringify(fq)),...JSON.parse(JSON.stringify(rtt))]
+      data.report = this.groupBy(array, 'stringDate')
+      })
+      this.$router.push({name:'DecisionMakerRouteReport', params: {id: data.routeId, report:data}})
     }
   }
 }

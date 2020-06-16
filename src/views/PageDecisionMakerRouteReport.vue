@@ -91,8 +91,15 @@ export default {
   props: {
     id: {
       type: Number
+    },
+    report: {
+      type: Object
     }
   },
+  created(){
+    console.log(this.report)
+  }
+  
 }
 </script>
 
