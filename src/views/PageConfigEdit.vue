@@ -309,18 +309,20 @@ export default {
           x.type = this.form.type[y]
           return x
         })
-     
+        let promise = []
         submit.map( x => {
-          db.Criteria.update({
+          promise.push(db.Criteria.update({
             weight : x.weight,
             type : x.criteriaType,
           }, {
             where : {
             id : x.id
             }
-          })
+          }))
         })  
-        this.$router.push('/config')
+        Promise.all(promise).then(()=>{
+          this.$router.push('/config')
+        })
        },
     onReset(evt) {
       evt.preventDefault()

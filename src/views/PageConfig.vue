@@ -41,13 +41,11 @@ export default {
   },
   created(){
     db.Criteria.findAll({raw:true})
-    .then(data => data.map(x => {
-        x.criteriaType = (x.criteriaType == 1) ? 'Benefit':'Cost'
-        return x
-      }
-    )
-  )
-    .then(data => this.weight = data)
+    .then(data =>{
+      data.map(x => x.criteriaType = (x.criteriaType == 1) ? 'Benefit':'Cost' )
+      this.weight = data
+      console.log(this.weight)
+    })
   }
 }
 </script>
