@@ -58,7 +58,7 @@ export default {
       Object.keys(formData.rtt).forEach(key => rtt.push({day:key, value:formData.rtt[key]}))
       
 
-      db.Report.findOrCreate({where:{reportDate: this.reportDate}}).spread(report=>{
+      db.Report.findOrCreate({where:{reportDate: this.reportDate,stringDate: this.reportDate}}).spread(report=>{
         Object.keys(formData.loadFactor).forEach(key => {
           db.LoadFactor.findOne({where:{reportID:report.id,routeBusStopID:key}}).then(token =>{
             if(token == null){

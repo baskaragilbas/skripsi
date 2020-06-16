@@ -12,14 +12,9 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 
 Vue.config.productionTip = false
+const db = require('@/../models/index.js')
 
-import Sequelize from 'sequelize'
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: './src/db/app.sqlite'
-});
 
-sequelize.authenticate()
 new Vue({
   router,
   store,
