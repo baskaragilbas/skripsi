@@ -11,6 +11,9 @@ module.exports = {
       reportDate: {
         type: Sequelize.DATE
       },
+      stringDate: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
