@@ -39,7 +39,7 @@ export default {
     },
     onClickRedirect(data) {
       data.preventDefault
-      this.$emit('redirect',data.item.id)
+      this.$emit('redirect',data.item)
     }
   }
 }
