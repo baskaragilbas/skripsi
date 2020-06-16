@@ -17,6 +17,7 @@ import Report from '@/views/PageReport.vue'
 import ReportForm from '@/components/ReportListForm.vue'
 // Decision Maker View
 import DecisionMaker from '@/views/PageDecisionMaker.vue'
+import DecisionMakerRouteReport from '@/views/PageDecisionMakerRouteReport.vue'
 
 Vue.use(VueRouter)
 
@@ -85,6 +86,12 @@ Vue.use(VueRouter)
     name: 'DecisionMaker',
     component: DecisionMaker
   },
+  {
+    path: '/decisionmaker/:id',
+    name: 'DecisionMakerRouteReport',
+    component: DecisionMakerRouteReport,
+    props: true
+  }
   
 ]
 
