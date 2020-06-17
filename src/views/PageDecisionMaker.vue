@@ -262,10 +262,11 @@ export default {
               }
             }})
       Promise.all([lf,hw,fq,rtt]).then(([lf,hw,fq,rtt])=>{
-      let array = [...JSON.parse(JSON.stringify(lf)),...JSON.parse(JSON.stringify(hw)),...JSON.parse(JSON.stringify(fq)),...JSON.parse(JSON.stringify(rtt))]
-      data.report = this.groupBy(array, 'stringDate')
-      })
-      this.$router.push({name:'DecisionMakerRouteReport', params: {id: data.routeId, report:data}})
+        let array = [...JSON.parse(JSON.stringify(lf)),...JSON.parse(JSON.stringify(hw)),...JSON.parse(JSON.stringify(fq)),...JSON.parse(JSON.stringify(rtt))]
+        data.report = this.groupBy(array, 'stringDate')
+      }).then(() => 
+        this.$router.push({name:'DecisionMakerRouteReport', params: {id: data.routeId, report:data}})
+      )     
     }
   }
 }
