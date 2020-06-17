@@ -59,7 +59,7 @@
       </b-tr>
       </b-thead>
       <b-tbody>
-         <b-tr v-for="frequency in frequencies" v-bind:key="frequency.id">
+         <b-tr v-for="frequency in sortedFrequencies" v-bind:key="frequency.id">
           <b-td colspan="5">{{frequency.time}}</b-td>
           <b-td colspan="2">{{frequency.value}}</b-td>
         </b-tr>
@@ -103,6 +103,16 @@ export default {
       headWays: null, 
       frequencies: null,
       rtts: null
+    }
+  },
+  computed: {
+    sortedFrequencies () {
+      const unsorted = [...this.frequencies]
+      return unsorted.sort((a, b) => {
+        var x = a.time.toLowerCase();
+        var y = b.time.toLowerCase();
+        return x < y ? -1 : x > y ? 1 : 0;
+      })
     }
   },
   methods: {
