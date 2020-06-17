@@ -8,20 +8,27 @@
           <b-form-select
                 class="mb-2 mr-sm-2 mb-sm-0"
                 v-model="start"
-                :options="[{text: 'Tanggal Mulai', value: null},...startdate]"
+                :options="[...startdate]"
                 on:blur="generateEndDate(start)"
                 required >
+                <template v-slot:first>
+                  <b-form-select-option :value="null" disabled>-- Tanggal Mulai --</b-form-select-option>
+                </template>
               </b-form-select>
           <b-form-select
                 class="mb-2 mr-sm-2 mb-sm-0"
                 v-model="end"
-                :options="[{text: 'Tanggal Selesai', value: null},...enddate]"
+                :options="[...enddate]"
                 >
+                <template v-slot:first>
+                  <b-form-select-option :value="null" disabled>-- Tanggal Selesai --</b-form-select-option>
+                </template>
               </b-form-select>
         </div>
 
         <b-button type="submit" class="mb-2 mr-sm-2 mb-sm-0" variant="primary">Submit</b-button>
       </b-form>
+      <br>
       <b-row class="mb-3">
         <b-col>
           <AppTable :items="items" :fields="fields" @redirect="redirectPage" ></AppTable>
@@ -262,10 +269,11 @@ export default {
               }
             }})
       Promise.all([lf,hw,fq,rtt]).then(([lf,hw,fq,rtt])=>{
-      let array = [...JSON.parse(JSON.stringify(lf)),...JSON.parse(JSON.stringify(hw)),...JSON.parse(JSON.stringify(fq)),...JSON.parse(JSON.stringify(rtt))]
-      data.report = this.groupBy(array, 'stringDate')
-      })
-      this.$router.push({name:'DecisionMakerRouteReport', params: {id: data.routeId, report:data}})
+        let array = [...JSON.parse(JSON.stringify(lf)),...JSON.parse(JSON.stringify(hw)),...JSON.parse(JSON.stringify(fq)),...JSON.parse(JSON.stringify(rtt))]
+        data.report = this.groupBy(array, 'stringDate')
+      }).then(() => 
+        this.$router.push({name:'DecisionMakerRouteReport', params: {id: data.routeId, report:data}})
+      )     
     }
   }
 }
