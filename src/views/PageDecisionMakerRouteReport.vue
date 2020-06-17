@@ -59,7 +59,7 @@
       </b-tr>
       </b-thead>
       <b-tbody>
-         <b-tr v-for="frequency in sortedFrequencies" v-bind:key="frequency.id">
+         <b-tr v-for="frequency in sorted" v-bind:key="frequency.id">
           <b-td colspan="5">{{frequency.time}}</b-td>
           <b-td colspan="2">{{frequency.value}}</b-td>
         </b-tr>
@@ -102,13 +102,14 @@ export default {
       loadFactors: null,
       headWays: null, 
       frequencies: null,
-      rtts: null
+      rtts: null,
+      sorted: null
     }
   },
   computed: {
     sortedFrequencies () {
-      const unsorted = [...this.frequencies]
-      return unsorted.sort((a, b) => {
+      this.sorted = [...this.frequencies]
+      return sorted.sort((a, b) => {
         var x = a.time.toLowerCase();
         var y = b.time.toLowerCase();
         return x < y ? -1 : x > y ? 1 : 0;
@@ -134,13 +135,24 @@ export default {
         }
       ))
 
-      this.frequencies =  [...Object.values({...selectedDate[2].Frequencies})].map(obj => (
-        {
-          id: obj.id,
-          time: obj.time, 
-          value: obj.value
-        }
-      ))
+      return new Promise((resolve, reject) => {
+        this.frequencies =  [...Object.values({...selectedDate[2].Frequencies})].map(obj => (
+          {
+            id: obj.id,
+            time: obj.time, 
+            value: obj.value
+          }
+        ))
+        resolve(this.frequencies)
+      }).then((freqs) => {
+          this.sorted = [...freqs]
+          return sorted.sort((a, b) => {
+            var x = a.time.toLowerCase();
+            var y = b.time.toLowerCase();
+            return x < y ? -1 : x > y ? 1 : 0;
+          })
+      })
+      
 
       this.rtts =  [...Object.values({...selectedDate[3].RTTs})].map(obj => (
         {
