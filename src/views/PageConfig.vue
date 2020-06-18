@@ -8,10 +8,12 @@
           <AppTable :items="weight" :fields="fields"></AppTable>
         </b-col>
       </b-row>
-
+      
       <b-row class="mb-3">
         <b-col md="3" class="ml-md-auto ml-sm-auto p-3">
-          <router-link class="btn btn-secondary" v-bind:to="{name: 'ConfigEdit'}">Edit</router-link>
+          <b-button 
+            @click.prevent="$router.push({name: 'ConfigEdit'})" 
+            class="mb-2 mr-sm-2 mb-sm-0" variant="primary">Edit</b-button>
         </b-col>
       </b-row>
     </b-container>  

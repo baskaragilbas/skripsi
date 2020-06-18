@@ -3,7 +3,12 @@
     <b-form @submit="onCheck" @reset="onReset" v-if="show" >
       <div>
         <b-table-simple hover small caption-top responsive>
-          <caption><router-link class="btn btn-secondary" v-bind:to="{name: 'Config'}">Kembali</router-link> Bobot dengan Menggunakan Metode AHP</caption>
+          <caption> 
+            <b-button 
+            @click.prevent="$router.push({name: 'Config'})" 
+            class="mb-2 mr-sm-2 mb-sm-0" variant="secondary">Kembali</b-button>
+            Bobot dengan Menggunakan Metode AHP
+          </caption>
           <b-thead head-variant="dark">
           <b-tr>
             <b-th colspan="4" class="mx-auto">Bobot kepentingan antara suatu kriteria terhadap kriteria yang lain</b-th>
@@ -240,8 +245,8 @@
             </b-tfoot>
         </b-table-simple>
       </div>
-      <b-button type="submit" variant="primary">Submit</b-button>
-      <b-button type="reset" variant="danger">Reset</b-button>
+      <b-button type="submit" variant="primary" class="mb-2 mr-sm-2 mb-sm-0" >Submit</b-button>
+      <b-button type="reset" variant="danger" class="mb-2 mr-sm-2 mb-sm-0" >Reset</b-button>
     </b-form>
   </div>
 </template>
