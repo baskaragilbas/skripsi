@@ -110,8 +110,8 @@
       </b-tfoot>
     </b-table-simple>
   </div>
-  <b-button type="submit" variant="primary">Submit</b-button>
-  <b-button type="reset" variant="danger">Reset</b-button>
+  <b-button type="submit" variant="primary" class="mb-2 mr-sm-2 mb-sm-0">Submit</b-button>
+  <b-button type="reset" variant="danger" class="mb-2 mr-sm-2 mb-sm-0">Reset</b-button>
 </b-form>
 </template>
 

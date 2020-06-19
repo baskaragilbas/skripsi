@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Page Report</h1>
+    <h3>Page Report</h3>
     <div>
       <label for="datepicker">Laporan tanggal :</label>
       <b-form-datepicker id="datepicker" v-model="reportDate" class="mb-2"></b-form-datepicker>

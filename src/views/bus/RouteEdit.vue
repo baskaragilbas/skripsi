@@ -10,7 +10,9 @@
         </div>
         <b-button type="submit" class="mb-2 mr-sm-2 mb-sm-0" variant="primary">Submit</b-button>
       </b-form>
+
       <div>
+        <br>
         <AppTable :items="items" :fields="fields" @deleteData="deleteData"></AppTable>
       </div>
     </div>
