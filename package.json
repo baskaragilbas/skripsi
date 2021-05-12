@@ -15,7 +15,7 @@
     "axios": "^0.19.2",
     "bootstrap-vue": "^2.14.0",
     "core-js": "^3.6.4",
-    "mathjs": "^7.0.0",
+    "mathjs": "^7.5.1",
     "sequelize": "^5.21.9",
     "sequelize-cli": "^5.5.1",
     "sqlite3": "^4.2.0",
